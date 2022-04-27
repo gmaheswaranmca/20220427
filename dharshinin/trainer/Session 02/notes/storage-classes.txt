@@ -1,0 +1,263 @@
+Storage Classes:
+-------------------------------------------
+auto - automatic duration and no linkage
+register - automatic duration and no linkage; address of this variable cannot be taken
+static - static duration and internal linkage (unless at block scope)
+extern - static duration and external linkage (unless already declared internal)
+-------------------------------------------
+1. Every variable inside the function or argument are by default "auto"
+   auto variable will not initialized automatically. 
+   auto variable is local variable to the function 
+   we have to do manually
+   it is stored in stack memory 
+2. register is qualified manually and also local variable to the function 
+   we cannot access the address of this variable 
+   it is stored in cpu register 
+3. global variable are external variables 
+   the keyword "extern" is used to define the name in the file 
+   then later the names will be memory allocated 
+   
+   global variable: variable common to all the functions across the module
+4. static variable is declared inside the function 
+   lifetime of the static variable is throughtout the program 
+   access is local to the function 
+   why?
+   we want to have the global variable names specific to the function 
+   same names can be used in many functions if they are static global variable 
+   
+Example:
+-------------------------------------------
+*****main.c******
+#include<stdio.h>
+int addTen(int num){//by default auto 
+    register int x; //&x
+    auto int sum = num + 10;
+    return sum;
+}
+int main(){
+    int firstNum = 10; //by default auto //initialization
+    auto int result = addTen(firstNum);
+	return 0;
+}
+-------------------------------------------
+*****main.c******
+#include<stdio.h>
+#include"add.h"
+int main(){
+    int firstNum = 10; //by default auto //initialization
+    bigNum = 200;
+    auto int result = addTen(firstNum);
+	return 0;
+}
+***add.h****
+#include"add.h"
+extern long bigNum;  // extern hels and tells the compiler i will use the variable name later
+int addTen(int num)
+
+***add.c**
+#include"add.h"
+long bigNum;
+int addTen(int num){//by default auto 
+    register int x; //&x
+    auto int sum = num + 10;
+    sum = sum + bigNum;
+    return sum;
+}
+-------------------------------------------
+*****main.c******
+#include<stdio.h>
+int addTen(int num){//by default auto 
+    static counter = 10; //statement will run only once ie first time of this fn call 
+    register int x; //&x
+    counter += 10;
+    auto int sum = num + counter;
+    return sum;
+}
+int main(){
+    int firstNum = 10; //by default auto //initialization
+    auto int result = addTen(firstNum); // 30
+    auto int result1 = addTen(firstNum);//40
+    auto int result2 = addTen(firstNum);//50
+	return 0;
+}
+-------------------------------------------
+1 2 3 4 5 6 ... Natural Numbers 
+  1 1 1 1 1
+10 12 15 19 .... N terms 
+  2  3  4
+0 1 1 2 3 5 8 ..... N terms 
+
+100 104 113 129 ... N terms 
+   4   9   16
+-------------------------------------------
+
+*****main.c******
+//1 2 3 4 5 6 ... Natural Numbers
+#include<stdio.h>
+int seed = 1;
+int diff = 1;
+int giveNext(){
+    int res = seed;
+    seed = seed + diff;
+    return res;
+}
+int main(){
+    for(int I = 1; I <= 5; I++){
+        printf("%d ",giveNext());
+    }
+	return 0;
+}
+-------------------------------------------
+*****main.c******
+//10 12 15 19 .... N terms 
+#include<stdio.h>
+int seed = 10;
+int diff = 2;
+int giveNext(){
+    int res = seed;
+    seed = seed + diff;
+    diff++;
+    return res;
+}
+int main(){
+    for(int I = 1; I <= 5; I++){
+        printf("%d ",giveNext());
+    }
+	return 0;
+}
+-------------------------------------------
+//100 104 113 129 ... N terms 
+#include<stdio.h>
+int seedOne = 0;
+int seedTwo = 1;
+
+int giveNext(){
+    int res = seedOne;
+    int third = seedOne + seedTwo;
+    seedOne = seedTwo;
+    seedTwo = third;
+    return res;
+}
+int main(){
+    for(int I = 1; I <= 10; I++){
+        printf("%d ",giveNext());
+    }
+	return 0;
+}
+-------------------------------------------
+//100 104 113 129 ... N terms 
+#include<stdio.h>
+int seed = 10;
+int diff = 2;
+int giveNext(){
+    int res = seed;
+    seed = seed + diff*diff;
+    diff++;
+    return res;
+}
+int main(){
+    for(int I = 1; I <= 5; I++){
+        printf("%d ",giveNext());
+    }
+	return 0;
+}
+-------------------------------------------
+//1 2 3 4 5 6 ... Natural Numbers
+//100 104 113 129 ... N terms 
+#include<stdio.h>
+int seed1 = 1;
+int diff1 = 1;
+int giveSeriesNatural(){
+    int res = seed1;
+    seed1 = seed1 + diff1;
+    return res;
+}
+
+int seed2 = 10;
+int diff2 = 2;
+int giveSeriesDyna(){
+    int res = seed2;
+    seed2 = seed2 + diff2*diff2;
+    diff2++;
+    return res;
+}
+
+
+int main(){
+    for(int I = 1; I <= 5; I++){
+        printf("%d ",giveSeriesNatural());
+    }
+    for(int I = 1; I <= 5; I++){
+        printf("%d ",giveSeriesDyna());
+    }
+	return 0;
+}
+-------------------------------------------
+//1 2 3 4 5 6 ... Natural Numbers
+//100 104 113 129 ... N terms 
+#include<stdio.h>
+
+int giveSeriesNatural(){
+    static int seed = 1;
+    static int diff = 1;
+    
+    int res = seed;
+    seed = seed + diff;
+    return res;
+}
+
+
+int giveSeriesDyna(){
+    static int seed = 10;
+    static int diff = 2;
+    
+    int res = seed;
+    seed = seed + diff*diff;
+    diff++;
+    return res;
+}
+
+
+int main(){
+    for(int I = 1; I <= 5; I++){
+        printf("%d ",giveSeriesNatural());
+    }
+    for(int I = 1; I <= 5; I++){
+        printf("%d ",giveSeriesDyna());
+    }
+	return 0;
+}
+-------------------------------------------
+string literal: double quotes enclosed text ex: "Maheswaran"
+string variable: 'null terminated' character array 
+    char firstName[256] = "Maheswaran"; // '\0' null-terminated character is appened
+        //[M] [a] [h] [e] [ s] [w] [a] [r] [a] [n]  [\0] [ ] ..... [ ]
+        // 0   1   2   3   4   5  6    7   8  9    10  11
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+int main(){
+    char csv[1000] = "101,Maheswaran,2000.30"; //comma separated value 
+    int id;
+    char empName[256];
+    float sal;
+    
+    printf("given csv : %s\n",csv);
+    
+    char *attr;
+    attr = strtok(csv,","); // 101
+    //printf("%s\n",attr);
+    id = atoi(attr);
+    attr = strtok(NULL,",");//Maheswaran
+    //printf("%s\n",attr);
+    strcpy(empName,attr);
+    attr = strtok(NULL,",");//2000.30
+    //printf("%s\n",attr);
+    sal = atof(attr);
+    
+    printf("id=%d\nname=%s\nsal=%.2f\n",id,empName,sal);
+    
+    return 0;
+}
+-------------------------------------------
