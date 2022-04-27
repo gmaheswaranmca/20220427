@@ -1,0 +1,289 @@
+arrays
+array implementation stack queue
+recursion : functions
+storage classes
+--------------------------------------------
+
+#include<stdio.h>
+
+int main() {
+    
+}
+--------------------------------------------
+array: sequence of data items of same item 
+       to handle more than one data 
+       constant pointer that holdes base address 
+       base address: address of the first element 
+--------------------------------------------       
+Declaration    
+    float salary; 
+    float salaries[100]; // 8-byte
+        //[23] [ ] [ ] [ ] .. [ ]
+        // 0   1   2   3      99
+        //120  128 136        99*8+120
+    
+    int ages[200];
+Access:   
+    printf("%u",*salaries);
+    Read:
+    float sal = salaries[4];
+    Write:
+    salaries[4] = 1000;
+    
+    Traversal:
+        Forward:
+        for(int index = 0; index < 100; index++){ //0 1 2 ..99 100
+            scanf("%f", &salaries[index]);
+        }
+        
+        for(int index = 0; index < 100; index++){ 
+            printf("%.2f ", salaries[index]);
+        }
+        
+        for(int index = 0; index < 100; index++){ 
+            salaries[index] = salaries[index] + 110;
+            //salaries[index] += 100;
+        }
+        Backward:
+        for(int index = 100-1; index >= 0; index--){ 99 98 97 ... 0
+            salaries[index] = salaries[index] + 100;
+        }
+--------------------------------------------
+Reading Processing Printing the array
+--------------------------------------------
+#define SIZE 3
+#include<stdio.h>
+
+int main() {
+    float salaries[SIZE] ;
+    
+    printf("Enter salaries one by one:\n");
+    for(int index = 0; index < SIZE; index++){ 
+        printf("Enter salary at index %d:",index);
+        scanf("%f", &salaries[index]);
+    }
+    
+    for(int index = 0; index < SIZE; index++){ 
+        salaries[index] = salaries[index] + 110;
+    }
+    
+    printf("Salaries after added the bonus:\n");
+    for(int index = 0; index < SIZE; index++){ 
+        printf("%.2f ", salaries[index]);
+    }
+        
+    return 0;
+}
+--------------------------------------------
+Reading Processing Printing the array
+Migrate the code into functions
+--------------------------------------------
+#define SIZE 3
+#include<stdio.h>
+
+//void readSalaries(float s[SIZE],int count){ //v1
+//void readSalaries(float s[],int count){     //v2
+void readSalaries(float *s,int count){        //v3
+    printf("Enter salaries one by one:\n");
+    for(int index = 0; index < count; index++){ 
+        printf("Enter salary at index %d:",index);
+        scanf("%f", &s[index]);
+    }
+}
+void processSalaries(float *s,int count){
+    for(int index = 0; index < count; index++){ 
+        s[index] = s[index] + 110;
+    }
+}
+void printSalaries(float *s,int count){
+    printf("Salaries after added the bonus:\n");
+    for(int index = 0; index < count; index++){ 
+        printf("%.2f ", s[index]);
+    }
+}
+int main() {
+    float salaries[SIZE] ;
+    
+    readSalaries(salaries,SIZE);
+    processSalaries(salaries,SIZE);
+    printSalaries(salaries,SIZE);
+        
+    return 0;
+}
+--------------------------------------------
+Synonumous for array element access:
+--------------------------------------------
+salaries[index]         salaries[3]
+*(salaries + index)     *(salaries + 3)
+*(index + salaries)     *(3 + salaries)
+index[salaries]         3[salaries]
+--------------------------------------------
+Reading Processing Printing the array
+Modularize the code into files
+--------------------------------------------
+****main.c****
+#include"const.h"
+#include"salaries.h"
+int main() {
+    float salaries[SIZE] ;
+    
+    readSalaries(salaries,SIZE);
+    processSalaries(salaries,SIZE);
+    printSalaries(salaries,SIZE);
+        
+    return 0;
+}
+****salaries.h****
+void readSalaries(float *s,int count);
+void processSalaries(float *s,int count);
+void printSalaries(float *s,int count);
+****salaries.c****
+#include<stdio.h>
+#include"salaries.h"
+
+void readSalaries(float *s,int count){       
+    printf("Enter salaries one by one:\n");
+    for(int index = 0; index < count; index++){ 
+        printf("Enter salary at index %d:",index);
+        scanf("%f", &s[index]);
+    }
+}
+void processSalaries(float *s,int count){
+    for(int index = 0; index < count; index++){ 
+        s[index] = s[index] + 110;
+    }
+}
+void printSalaries(float *s,int count){
+    printf("Salaries after added the bonus:\n");
+    for(int index = 0; index < count; index++){ 
+        printf("%.2f ", s[index]);
+    }
+}
+****const.h****
+#define SIZE 3
+--------------------------------------------
+Read N '"long long int" numbers'
+Find sum of those numbers 
+--------------------------------------------
+****main.c***
+#include"const.h"
+#include"large_num.h"
+#include<stdio.h>
+int main(){
+    int N;
+    long long int numbers[SIZE];
+    printf("Enter number of numbers:");
+    scanf("%d",&N);
+    readNumbers(numbers,N);
+    long long int sum = findSum(numbers,N);
+    printf("The sum is %lld", sum);
+    
+    return 0;
+}
+
+****const.h****
+#define SIZE 2000
+
+****large_num.h****
+void readNumbers(long long int *nums, int count);
+long long int findSum(long long int *nums, int count);
+****large_num.c****
+--------------------------------------------
+stack: LIFO     biscuit packet 
+    biscuit 10  top     pop     push 
+            9   
+            8
+            ...
+            1   
+                    
+queue: FIFO     railway station ticket counter 
+--------------------------------------------
+****main.c***
+#include"const.h"
+#include"proj_stack.h"
+#include<stdio.h>
+
+int main(){
+    int top=-1;
+    double stack[SIZE];
+    double proj_val;
+    
+    int menu;
+    do{
+        printf("Menu(1-push, 2-pop, 3-Print Stack):");
+        scanf("%d",&menu);
+        
+        switch(menu){
+            case 1:
+                
+                printf("Enter project value:");
+                scanf("%lf",&proj_val);
+                push(stack,&top,proj_val);
+                break;
+           case 2:
+                proj_val = pop(stack,&top);
+                if(proj_val > 0){
+                    printf("The last project is %.2lf\n",proj_val);
+                }
+                break;
+            case 3:
+                printStack(stack,&top);
+                break;
+        }
+    }while(menu == 1 || menu == 2 || menu == 3);
+    
+    return 0;
+}
+****const.h****
+#define SIZE 2000
+
+****proj_stack.h***
+void push(double *s,int *topAddr,double val);
+double pop(double *s,int *topAddr);
+void printStack(double *s,int *topAddr);
+
+****proj_stack.c***
+#include"proj_stack.h"
+#include<stdio.h>
+#include"const.h"
+void push(double *s,int *topAddr,double val){
+    if((*topAddr) == SIZE-1){
+        printf("Stack is full\n");
+        return;
+    }
+    
+    (*topAddr)++;
+    
+    s[(*topAddr)] = val;
+}
+double pop(double *s,int *topAddr){
+    if((*topAddr) == -1){
+        printf("Stack is empty\n");
+        return -1.0;
+    }
+    
+    double res = s[(*topAddr)];
+    (*topAddr)--;
+    return res;
+}
+void printStack(double *s,int *topAddr){
+    printf("Project Stack:\n");
+    for(int index = 0; index <= (*topAddr); index++){ 
+        printf("%.2lf ", s[index]);
+    }
+    printf("\n");
+}
+--------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
