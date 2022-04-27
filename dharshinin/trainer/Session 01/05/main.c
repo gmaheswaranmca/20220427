@@ -1,5 +1,4 @@
-//Read N '"long long int" numbers'
-//Find sum of those numbers 
+//Implementation of Stack using Array
 #include"const.h"
 #include"proj_stack.h"
 #include<stdio.h>
