@@ -1,0 +1,204 @@
+dynamic memory allocation
+-------------------------------------------
+stdlib -> dynamic memory 
+-------------------------------------------
+	
+-------------------------------------------
+firstNum, secondNum, sum
+firstNumAddr, secondNumAddr, sumAddr
+-------------------------------------------
+#include<stdio.h>
+#include<stdlib.h>
+int main(){
+	int firstNum;
+	int secondNum;
+	int sum;
+	
+	int* firstNumAddr=NULL;
+	int* secondNumAddr=NULL;
+	int* sumAddr=NULL;
+	
+	firstNumAddr=&firstNum;
+	secondNumAddr=&secondNum;
+	sumAddr=&sum;
+	
+	printf("Enter first number:");
+	scanf("%d",firstNumAddr);
+	
+	printf("Enter second number:");
+	scanf("%d",secondNumAddr);
+	
+	(*sumAddr) = (*firstNumAddr) + (*secondNumAddr);
+	
+	printf("First Number:%d\n",(*firstNumAddr));
+	printf("Second Number:%d\n",(*secondNumAddr));
+	printf("Sum:%d\n",(*sumAddr));	
+	
+	return EXIT_SUCCESS;
+}
+-------------------------------------------
+const keyword in the pointer declaration
+1. after the symbol asterisk *
+    the pointer should not change its address
+2. before the symbol asterisk *
+    the pointer should not change the valued it is pointing 
+    
+Examples:
+    01 const int* p=&var; //using pointer we should not try to write into "var"
+    02 int const* p=&var; //01 and 02 are synonymous 
+    03 int *const p=&var; //the address in the pointer cannot be changed 
+    04 const int*const p=&var; //using pointer we should not try to write into "var"
+                               //and also the address in the pointer cannot be changed
+-------------------------------------------
+#include<stdio.h>
+#include<stdlib.h>
+void inputNumbers(int*const firstNumAddr, int*const secondNumAddr){
+	printf("Enter first number:");
+	scanf("%d",firstNumAddr);
+	
+	printf("Enter second number:");
+	scanf("%d",secondNumAddr);
+}
+void doFindSum(const int*const firstNumAddr, const int*const secondNumAddr, int*const sumAddr){
+	(*sumAddr) = (*firstNumAddr) + (*secondNumAddr);
+}
+
+void print(const int*const firstNumAddr, const int*const secondNumAddr, const int*const sumAddr){
+	printf("First Number:%d\n",(*firstNumAddr));
+	printf("Second Number:%d\n",(*secondNumAddr));
+	printf("Sum:%d\n",(*sumAddr));	
+}
+
+int main(){
+	int firstNum;
+	int secondNum;
+	int sum;
+	
+	inputNumbers(&firstNum,&secondNum);
+	doFindSum(&firstNum,&secondNum,&sum);
+	print(&firstNum,&secondNum,&sum);
+	
+	
+	return EXIT_SUCCESS;
+}
+-------------------------------------------
+Dynamic memory :
+-------------------------------------------	
+int *x = (int*)malloc(5*sizeof(int));
+		 //void * one 20 bytes block is created and returned one address out malloc 
+		 //(int*) 20 bytes one block will become 20/4=5 int blocks we will have 
+		 //		  returns address of first int block 
+		 non-contiguous memory blocks
+		 
+		 (int*)calloc(5,sizeof(int));
+		 contiguous memory blocks 
+		 
+		free(x); // release 
+-------------------------------------------
+Memory management		
+------------------------------------------- 
+NULL ptr -> emptry/no address 	
+WILD ptr -> non NULL initialized pointer if used for indirection, we will face WILD 
+			ie illegal operation 
+DANGLING ptr -> The released memory block address 
+	ie it leads to illegal operation 	
+	how can we avoid here illegal operation? after released the memory,
+		set the pointer as NULL
+memory leak / hole: allocated memory if not released and not referred by our program process
+	those memory will not be used by any process 
+how will we fix the memory leak / hole:	release the alllocated memory 
+-------------------------------------------
+#include<stdio.h>
+#include<stdlib.h>
+void inputNumbers(int*const firstNumAddr, int*const secondNumAddr){
+	printf("Enter first number:");
+	scanf("%d",firstNumAddr);
+	
+	printf("Enter second number:");
+	scanf("%d",secondNumAddr);
+}
+void doFindSum(const int*const firstNumAddr, const int*const secondNumAddr, int*const sumAddr){
+	(*sumAddr) = (*firstNumAddr) + (*secondNumAddr);
+}
+
+void print(const int*const firstNumAddr, const int*const secondNumAddr, const int*const sumAddr){
+	printf("First Number:%d\n",(*firstNumAddr));
+	printf("Second Number:%d\n",(*secondNumAddr));
+	printf("Sum:%d\n",(*sumAddr));	
+}
+
+int main(){
+	int *firstNumAddr = NULL;  
+	int *secondNumAddr = NULL;
+	int *sumAddr = NULL;
+	
+	firstNumAddr = (int*)malloc(1*sizeof(int));
+	secondNumAddr = (int*)malloc(1*sizeof(int));
+	sumAddr = (int*)malloc(1*sizeof(int));
+	
+	inputNumbers(firstNumAddr,secondNumAddr);
+	doFindSum(firstNumAddr,secondNumAddr,sumAddr);
+	print(firstNumAddr,secondNumAddr,sumAddr);
+	
+	free(firstNumAddr);	
+	free(secondNumAddr);
+	free(sumAddr);
+	
+	firstNumAddr = NULL;
+	secondNumAddr = NULL;
+	sumAddr = NULL;
+	
+	return EXIT_SUCCESS;
+}
+
+-------------------------------------------
+N numbers 
+	K distinct number 
+-------------------------------------------
+#include<stdio.h>
+#include<stdlib.h>
+int changesRequiredToHaveDistinct(int N, int K, int *A){
+	return 0;
+}
+
+int main(){
+	int count, distinct_count;
+	printf("Enter number of numbers:");
+	scanf("%d",&count);
+	
+	printf("Enter number of distinct numbers:");
+	scanf("%d",&distinct_count);
+	
+	int *numbers = (int*)malloc(count * sizeof(int));
+	
+	int changeCount = changesRequiredToHaveDistinct(count,distinct_count,numbers);
+	printf("change count is %d",changeCount);
+	
+	free(numbers)
+	numbers = NULL;
+	return EXIT_SUCCESS;
+}
+
+-------------------------------------------
+int count = 10;
+int *numbers = (int*)malloc(count * sizeof(int));
+....
+
+count += 5;
+numbers = (int*)realloc(numbers,count * sizeof(int));
+----------------------------------------------
+numbers = (int*)realloc(numbers,count * sizeof(int));
+		//releases the numbers (old blocks)
+		//allocates new blocks for given size [increasing]
+		//copies the data from the old blocks 
+		//		10 blocks are copied from old data, 5 blocks will initialized by 0
+----------------------------------------------		
+count -= 5;
+numbers = (int*)realloc(numbers,count * sizeof(int));
+----------------------------------------------
+numbers = (int*)realloc(numbers,count * sizeof(int));
+		//releases the numbers (old blocks)
+		//allocates new blocks for given size [decreasing]
+		//copies the data from the old blocks 
+		//		5 blocks only are copied from old data
+----------------------------------------------
