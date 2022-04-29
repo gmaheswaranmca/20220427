@@ -1,0 +1,328 @@
+string: 
+	literal: double quotes enclosed "sequence of characters"
+	variable: character array to hold the string 
+		"null terminated character array"
+	null character: '\0'			-> int value is 0
+------------------------------------------------------------	
+//find number of the letter 'a' in given string 
+#include <stdio.h>
+
+int main()
+{
+    char firstName[256]; //[M][a][h][e][s][w][a][r][a][n][\0] ... []
+                         //0   1  2  3                     10     255 
+    printf("Enter name:");
+    scanf("%s",firstName);
+    
+    int count = 0;
+    for(int I=0; firstName[I]!='\0'; I++){
+        if(firstName[I] == 'a'){
+            count ++;
+        }
+    }
+    
+    printf("Number of [a] in %s is %d",firstName,count);
+
+    return 0;
+}
+------------------------------------------------------------
+//Print reverse of the string
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char firstName[256]; //[M][a][h][e][s][w][a][r][a][n][\0] ... []
+                         //0   1  2  3                     10     255 
+    printf("Enter name:");
+    scanf("%s",firstName);
+    
+    int count = 0;
+    /*for(int I=0; firstName[I]!='\0'; I++){
+        count++;
+    }*/
+    count = strlen(firstName);
+    printf("Reverse of the string is:\n");
+    for(int I=count-1; I>=0; I--){
+        printf("%c",firstName[I]);
+    }
+
+    return 0;
+}
+------------------------------------------------------------
+//To find number of characters, words, sentences 
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main()
+{
+    char firstName[256]; //India   is our country.   I am proud of my country.
+                         
+    printf("Enter name:");
+    fgets(firstName,256,stdin);
+    
+    int countWords = 0;
+    int countChars = 0;
+    int countSentences = 0;
+
+    for(int I=0; firstName[I]!='\0'; I++){
+        countChars++;
+        if((firstName[I]=='.'){
+            countSentences++;
+        }
+        if((firstName[I]==' ' || firstName[I]=='.' || firstName[I]==',')
+           && isalpha(firstName[I+1])
+            ){
+            countWords++;
+        }
+    }
+    countWords++;
+    
+    printf("The number of words in the given string is %d\n",countWords);
+    printf("The number of characters in the given string is %d\n",countChars);
+    printf("The number of sentences in the given string is %d\n",countSentences);
+
+    return 0;
+}
+------------------------------------------------------------
+string.h
+------------------------------------------------------------
+strcpy(s1,s2)		s1=s2
+strncpy(s1,s2,n)	s1=nCharsOf_s2	
+strlen(s)			len of s 
+strcat(s1,s2)		s1=s1+s2 
+strncat(s1,s2,n)		s1=s1+nCharsOf_s2
+strcmp(s1,s2) 		s1<s2 ? -1 : (s1>s2 ? +1 : 0)
+					    apple banana    -1
+						banana apple    +1 
+						apple apple 	0
+strncmp(s1,s2,n)	s1_nChars<s2_nChars ? -1 : (s1_nChars>s2_nChars ? +1 : 0)	
+strchr(s,ch)		is ch in s?
+					if so, returns the pointer from that ch (first occurance from left side)
+					otherwise, NULL
+strrchr(s,ch)		is ch in s?  (scans from right side)
+					if so, returns the pointer from that ch (first occurance from right side)
+					otherwise, NULL
+strstr(s1,s2)		if s2 in s1? (scans from left side)					
+					if so, returns the pointer from that s2 (first occurance from right side)
+					otherwise, NULL
+------------------------------------------------------------	
+Example for strcpy, strlen
+------------------------------------------------------------	
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char firstName[256] = "Maheswaran";
+    char anotherName[256];
+    strcpy(anotherName,firstName);
+    printf("First Name:%s\n",firstName);
+    printf("Another Name:%s\n",anotherName);
+    printf("No of chars in %s is %lu\n",firstName,strlen(firstName));
+
+    return 0;
+}			
+------------------------------------------------------------
+Example for strcat
+------------------------------------------------------------	
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char firstName[256] = "Maheswaran";
+    char lastName[256] = "Govindaraju";
+	printf("First Name:%s\n",firstName);
+    printf("Last Name:%s\n",lastName);
+    strcat(firstName,lastName);
+	printf("Full Name:%s\n",firstName);
+
+    return 0;
+}
+------------------------------------------------------------
+//firstName lastName -> fullName
+//Maheswaran Govindaraju    -> Maheswaran Govindaraju
+------------------------------------------------------------
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char firstName[256] = "Maheswaran";
+    char lastName[256] = "Govindaraju";
+    char fullName[256];
+    strcpy(fullName,firstName);
+    strcat(fullName," ");
+    strcat(fullName,lastName);
+	printf("First Name:%s\n",firstName);
+    printf("Last Name:%s\n",lastName);
+	printf("Full Name:%s\n",fullName);
+
+    return 0;
+}
+------------------------------------------------------------
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	printf("%d\n",strcmp("apple","banana"));//-1
+	printf("%d\n",strcmp("banana","apple"));//1
+	printf("%d\n",strcmp("apple","apple"));//0
+	printf("%d\n",strcmp("apple cake","apple fruit"));//-1
+	printf("%d\n",strncmp("apple cake","apple fruit",5));//0
+	printf("%s\n",strchr("apple cake",'p'));//pple cake
+	printf("%s\n",strrchr("apple cake",'p'));//ple cake
+	printf("%s\n",strstr("apple is a word. And the word means the fruit.","word"));
+		//word. And the word means the fruit.
+		
+	return 0;
+}
+------------------------------------------------------------
+//Sort N names
+#define SIZE 1000
+#include <stdio.h>
+#include <string.h>
+void clearInBuffer(){
+    while ( getchar() != '\n' );
+}
+void readNames(char names[][256], int N){
+    printf("Enter names one by one:\n");
+    
+    printf("Enter name at index 0:");
+    clearInBuffer();
+    fgets(names[0],256,stdin);
+    
+    for(int I=1; I < N; I++){
+        printf("Enter name at index %d:",I);
+        //scanf("%s",names[I]);
+        fgets(names[I],256,stdin);
+    }
+}
+void printNames(char names[][256], int N){
+    printf("The names are\n");
+    for(int I=0; I < N; I++){
+        printf("%d:%s",I,names[I]);
+    }
+}
+void sortSelection(char names[][256], int N){
+    //one two three four five six seven eight   MIN_WORD_I 7
+    //---  
+    //eight two three four five six seven one   MIN_WORD_I 1->2->3->4
+    //      ---
+    //eight five three four two six seven one
+    char temp[256];
+    for(int I=0; I < N-1; I++){
+        int MIN_WORD_I = I;
+        for(int J=I+1; J<N; J++){
+            if(strcmp(names[MIN_WORD_I],names[J])>0){
+                MIN_WORD_I = J;
+            }
+        }
+        if(MIN_WORD_I != I){
+            strcpy(temp,names[MIN_WORD_I]);
+            strcpy(names[MIN_WORD_I],names[I]);
+            strcpy(names[I],temp);
+        }
+    }
+}
+int main()
+{
+	char names[SIZE][256];
+	int N;
+	printf("Number of names:");
+	scanf("%d",&N);
+		
+	readNames(names,N);
+	printNames(names,N);
+	sortSelection(names,N);
+	printNames(names,N);
+	return 0;
+}
+------------------------------------------------------------
+To find frequency occurance of each character in the given string 
+------------------------------------------------------------
+#include <stdio.h>	//fibanacci			'f' -> 102 'i' -> 105
+
+int main()
+{
+    char firstName[256]; 
+	int counter[255]={};//intializes to all the elements to zero
+                         
+    printf("Enter name:");
+    scanf("%s",firstName);
+    
+    for(int I=0; firstName[I]!='\0'; I++){
+		int pos = (int)firstName[I];
+		counter[pos]++;
+	}
+	
+	for(int I=0;I<255;I++){
+		if(counter[I]>0){
+			printf("%c : %d\n",I,counter[I]);
+		}
+	}
+    
+    return 0;
+}
+------------------------------------------------------------
+Q: find first occuring repeating character in a given string 
+Q: find first occuring non-repeating character in a given string 
+Q: find distinct characters 
+Q: remove duplicates from the string 
+Q: reverse the string 
+Q: check given string is palindrome "malayalam"
+------------------------------------------------------------
+/*
+Q: reverse the string 
+Q: check given string is palindrome "malayalam"
+------------------------------------------------------------
+*/
+#include <stdio.h>	//fibanacci             malayalam
+#include <string.h> //
+void swap(char *a, char *b){
+    char t = (*a);
+    (*a) = (*b);
+    (*b) = t;
+}
+void reverseString(char *s){
+    int L = strlen(s);
+    
+    for(int I=0,J=L-1; I<J; I++,J--){
+        swap(&s[I],&s[J]);
+    }
+}
+int isPalindrome(char *s){
+    int L = strlen(s);
+    
+    for(int I=0,J=L-1; I<J; I++,J--){
+        if(s[I] != s[J]){
+            return 0;
+        }
+    }
+    return 1;
+}
+int main()
+{
+    char firstName[256]; 
+	int counter[255]={};//intializes to all the elements to zero
+                         
+    printf("Enter name:");
+    scanf("%s",firstName);
+   
+    if(isPalindrome(firstName) == 1){
+        printf("Palindrome");
+    }
+    else{
+        printf("Not Palindrome");
+    }
+    
+    reverseString(firstName);
+    printf("reversed string is %s",firstName);
+    
+    return 0;
+}
+------------------------------------------------------------
+
