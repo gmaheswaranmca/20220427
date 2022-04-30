@@ -1,0 +1,593 @@
+struct:
+	"composite data" | "object" | "structure" | "record" | "tuple" | "entity"
+	ARS: Flight, Customer, Admin, Booking, BookingPassenger 
+	EPMS: Employee, Project, Allocation, Admin
+	CRS: Cab, Driver, Customer, Trip
+	BMS:Customer, Account, Transaction, Admin, Preference
+union:
+	like struct 
+-----------------------------------------------------
+#include<stdio.h>
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;		
+};
+typedef struct _emp_t emp_t; //tagname or alias name
+
+void clearBuffer(){
+     while(getchar()!='\n');
+}
+
+int main(){
+   emp_t emp;
+   
+   printf("Enter employee id:");
+   scanf("%d",&emp.empId);
+   
+   printf("Enter employee name:");
+   clearBuffer();
+   scanf("%s",emp.empName);
+   
+   printf("Enter salary:");
+   scanf("%f",&emp.sal);
+   
+   printf("Enter bonus:");
+   scanf("%f",&emp.bonus);   
+   
+   
+   printf("given employee:\n");
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",emp.empId,
+    emp.empName, emp.sal, emp.bonus);
+   return 0;
+}
+-----------------------------------------------------
+#include<stdio.h>
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;		
+};
+typedef struct _emp_t emp_t; //tagname or alias name
+
+void clearBuffer(){
+     while(getchar()!='\n');
+}
+void readEmp(emp_t* eAddr){
+   printf("Enter employee id:");
+   scanf("%d",&eAddr->empId);
+   
+   printf("Enter employee name:");
+   clearBuffer();
+   scanf("%s",eAddr->empName);
+   
+   printf("Enter salary:");
+   scanf("%f",&eAddr->sal);
+   
+   printf("Enter bonus:");
+   scanf("%f",&eAddr->bonus);  
+}
+void printEmp(emp_t* eAddr){
+   printf("given employee:\n");
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",eAddr->empId,
+    eAddr->empName, eAddr->sal, eAddr->bonus);
+}
+float findTotalSal(emp_t* eAddr){
+    return eAddr->sal + eAddr->bonus;
+}
+int main(){
+   emp_t emp;
+   readEmp(&emp);
+   printEmp(&emp);
+   printf("\tThe total salary is %.2f\n",findTotalSal(&emp));
+   return 0;
+}
+-----------------------------------------------------
+#include<stdio.h>
+#include<stdlib.h>
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;		
+};
+typedef struct _emp_t emp_t; //tagname or alias name
+
+void clearBuffer(){
+     while(getchar()!='\n');
+}
+void readEmp(emp_t* eAddr){
+   printf("Enter employee id:");
+   scanf("%d",&eAddr->empId);
+   
+   printf("Enter employee name:");
+   clearBuffer();
+   scanf("%s",eAddr->empName);
+   
+   printf("Enter salary:");
+   scanf("%f",&eAddr->sal);
+   
+   printf("Enter bonus:");
+   scanf("%f",&eAddr->bonus);  
+}
+void printEmp(emp_t* eAddr){
+   printf("given employee:\n");
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",eAddr->empId,
+    eAddr->empName, eAddr->sal, eAddr->bonus);
+}
+float findTotalSal(emp_t* eAddr){
+    return eAddr->sal + eAddr->bonus;
+}
+int main(){
+   emp_t* empAddr = (emp_t*)malloc(1*sizeof(emp_t));
+   readEmp(empAddr);
+   printEmp(empAddr);
+   printf("\tThe total salary is %.2f\n",findTotalSal(empAddr));
+   free(empAddr);
+   empAddr=NULL;
+   return 0;
+}
+-----------------------------------------------------
+#include<stdio.h>
+union _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;		
+};
+typedef union _emp_t emp_t; //tagname or alias name
+
+void clearBuffer(){
+     while(getchar()!='\n');
+}
+
+int main(){
+   emp_t emp;
+   
+   printf("Enter employee id:");
+   scanf("%d",&emp.empId);
+   
+   printf("Enter employee name:");
+   clearBuffer();
+   scanf("%s",emp.empName);
+   
+   printf("Enter salary:");
+   scanf("%f",&emp.sal);
+   
+   printf("Enter bonus:");
+   scanf("%f",&emp.bonus);  
+   
+   
+   printf("given employee:\n");
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",emp.empId,
+    emp.empName, emp.sal, emp.bonus);
+   return 0;
+}
+-----------------------------------------------------
+#include<stdio.h>
+struct _date_t{
+    int day;
+    int month;
+    int year;
+};
+typedef struct _date_t date_t;
+
+int main(){
+   date_t date;
+   
+   printf("Enter date(space separated):");
+   scanf("%d%d%d",&date.day,&date.month,&date.year);
+   
+   printf("Date is %d-%d-%d",date.day,date.month,date.year);
+   return 0;
+}
+-----------------------------------------------------
+
+#include<stdio.h>
+struct _date_t{
+    int day;
+    int month;
+    int year;
+};
+typedef struct _date_t date_t;
+
+int main(){
+   date_t date;
+   
+   //printf("%03d %03d",7,22);
+   char dateStr[1000];// = "09-04-1979";
+   
+   printf("Enter date(Example:09-04-1979):");
+   scanf("%s",dateStr); //fscanf("%s",dateStr,stdin)    stdin->FILE ptr with 'r'
+   
+   sscanf(dateStr,"%02d-%02d-%4d",&date.day,&date.month,&date.year);
+   
+   printf("Date is %02d-%02d-%4d",date.day,date.month,date.year);
+   //fprintf("%s",dateStr,stdout)   //stdout->FILE ptr with 'w'/'a'
+   
+   return 0;
+}
+-----------------------------------------------------
+//nested structure
+#include<stdio.h>
+struct _date_t{
+    int day;
+    int month;
+    int year;
+};
+typedef struct _date_t date_t;
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;	
+	
+	date_t join_date;
+};
+typedef struct _emp_t emp_t;
+
+void clearBuffer(){
+     while(getchar()!='\n');
+}
+void readEmp(emp_t* eAddr){
+   printf("Enter employee id:");
+   scanf("%d",&eAddr->empId);
+   
+   printf("Enter employee name:");
+   clearBuffer();
+   scanf("%s",eAddr->empName);
+   
+   printf("Enter salary:");
+   scanf("%f",&eAddr->sal);
+   
+   printf("Enter bonus:");
+   scanf("%f",&eAddr->bonus);  
+   
+   char dateStr[1000];// = "09-04-1979";
+   
+   printf("Enter date(Example:09-04-1979):");
+   scanf("%s",dateStr);
+   
+   sscanf(dateStr,"%02d-%02d-%4d",&eAddr->join_date.day,&eAddr->join_date.month,&eAddr->join_date.year);
+    //&eAddr->join_date.day     equals        &((eAddr->join_date).day)
+}
+void printEmp(emp_t* eAddr){
+   printf("given employee:\n");
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",eAddr->empId,
+    eAddr->empName, eAddr->sal, eAddr->bonus);
+   printf("\tJoin Date:%02d-%02d-%4d\n",eAddr->join_date.day,eAddr->join_date.month,eAddr->join_date.year);    
+}
+float findTotalSal(emp_t* eAddr){
+    return eAddr->sal + eAddr->bonus;
+}
+int main(){
+   emp_t emp;
+   readEmp(&emp);
+   printEmp(&emp);
+   printf("\tThe total salary is %.2f\n",findTotalSal(&emp));
+   return 0;
+}
+-----------------------------------------------------
+//array of employees
+#define SIZE 1000
+#include<stdio.h>
+struct _date_t{
+    int day;
+    int month;
+    int year;
+};
+typedef struct _date_t date_t;
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;	
+	
+	date_t join_date;
+};
+typedef struct _emp_t emp_t;
+
+void clearBuffer(){
+     while(getchar()!='\n');
+}
+void readEmp(emp_t* eAddr){
+   printf("Enter employee id:");
+   scanf("%d",&eAddr->empId);
+   
+   printf("Enter employee name:");
+   clearBuffer();
+   scanf("%s",eAddr->empName);
+   
+   printf("Enter salary:");
+   scanf("%f",&eAddr->sal);
+   
+   printf("Enter bonus:");
+   scanf("%f",&eAddr->bonus);  
+   
+   char dateStr[1000];// = "09-04-1979";
+   
+   printf("Enter date(Example:09-04-1979):");
+   scanf("%s",dateStr);
+   
+   sscanf(dateStr,"%02d-%02d-%4d",&eAddr->join_date.day,&eAddr->join_date.month,&eAddr->join_date.year);
+    //&eAddr->join_date.day     equals        &((eAddr->join_date).day)
+}
+void printEmp(emp_t* eAddr){
+   //printf("given employee:\n");
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",eAddr->empId,
+    eAddr->empName, eAddr->sal, eAddr->bonus);
+   printf("\tJoin Date:%02d-%02d-%4d\n",eAddr->join_date.day,eAddr->join_date.month,eAddr->join_date.year);    
+}
+float findTotalSal(emp_t* eAddr){
+    return eAddr->sal + eAddr->bonus;
+}
+int main(){
+   emp_t employees[SIZE];
+   int count=0;
+   
+   int menu;
+   
+   do{
+       printf("Choice(1-Add Employee, 2-Display All):");
+       scanf("%d",&menu);
+       switch(menu){
+           case 1:
+            readEmp(&employees[count]);
+            count++;
+            break;
+           case 2:
+            for(int I=0;I<count;I++){
+                printf("Employee at %d:\n",I);
+                 printEmp(&employees[I]);
+                 printf("\tThe total salary is %.2f\n",findTotalSal(&employees[I]));
+            }
+            break;
+       }
+   }while(1 == menu ||  2 == menu);
+   return 0;
+}
+--------------------------------------------------------------
+#define SIZE 1000
+#include<stdio.h>
+#include<stdlib.h>
+struct _date_t{
+    int day;
+    int month;
+    int year;
+};
+typedef struct _date_t date_t;
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;	
+	
+	date_t join_date;
+};
+typedef struct _emp_t emp_t;
+
+void clearBuffer(){
+     while(getchar()!='\n');
+}
+void readEmp(emp_t* eAddr){
+   printf("Enter employee id:");
+   scanf("%d",&eAddr->empId);
+   
+   printf("Enter employee name:");
+   clearBuffer();
+   scanf("%s",eAddr->empName);
+   
+   printf("Enter salary:");
+   scanf("%f",&eAddr->sal);
+   
+   printf("Enter bonus:");
+   scanf("%f",&eAddr->bonus);  
+   
+   char dateStr[1000];// = "09-04-1979";
+   
+   printf("Enter date(Example:09-04-1979):");
+   scanf("%s",dateStr);
+   
+   sscanf(dateStr,"%02d-%02d-%4d",&eAddr->join_date.day,&eAddr->join_date.month,&eAddr->join_date.year);
+    //&eAddr->join_date.day     equals        &((eAddr->join_date).day)
+}
+void printEmp(emp_t* eAddr){
+   //printf("given employee:\n");
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",eAddr->empId,
+    eAddr->empName, eAddr->sal, eAddr->bonus);
+   printf("\tJoin Date:%02d-%02d-%4d\n",eAddr->join_date.day,eAddr->join_date.month,eAddr->join_date.year);    
+}
+float findTotalSal(emp_t* eAddr){
+    return eAddr->sal + eAddr->bonus;
+}
+int main(){
+   emp_t* employees =(emp_t*)calloc(SIZE,sizeof(emp_t)); //dynamic array
+   int count=0;
+   
+   int menu;
+   
+   do{
+       printf("Choice(1-Add Employee, 2-Display All):");
+       scanf("%d",&menu);
+       switch(menu){
+           case 1:
+            readEmp(&employees[count]);
+            count++;
+            break;
+           case 2:
+            for(int I=0;I<count;I++){
+                printf("Employee at %d:\n",I);
+                 printEmp(&employees[I]);
+                 printf("\tThe total salary is %.2f\n",findTotalSal(&employees[I]));
+            }
+            break;
+       }
+   }while(1 == menu ||  2 == menu);
+   
+   free(employees);
+   employees = NULL;
+   return 0;
+}
+--------------------------------------------------------------
+
+#include<stdio.h>
+
+struct _date_t{
+    int day;
+    int month;
+    int year;
+};
+typedef struct _date_t date_t;
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;	
+	
+	date_t join_date;
+};
+typedef struct _emp_t emp_t;
+
+
+void printEmp(emp_t* eAddr){
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",eAddr->empId,
+    eAddr->empName, eAddr->sal, eAddr->bonus);
+   printf("\tJoin Date:%02d-%02d-%4d\n",eAddr->join_date.day,eAddr->join_date.month,eAddr->join_date.year);    
+}
+int main(){
+   emp_t emp = {1001,"Murali",4000,10,{1,2,2022}};
+   printEmp(&emp);
+   
+   return 0;
+}
+--------------------------------------------------------------
+#include<stdio.h>
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;	
+	
+	struct _date_t{
+        int day;
+        int month;
+        int year;
+    } join_date;
+};
+typedef struct _emp_t emp_t;
+
+
+void printEmp(emp_t* eAddr){
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",eAddr->empId,
+    eAddr->empName, eAddr->sal, eAddr->bonus);
+   printf("\tJoin Date:%02d-%02d-%4d\n",eAddr->join_date.day,eAddr->join_date.month,eAddr->join_date.year);    
+}
+int main(){
+   emp_t emp = {1001,"Murali",4000,10,{1,2,2022}};
+   printEmp(&emp);
+   
+   return 0;
+}
+--------------------------------------------------------------
+#include<stdio.h>
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;	
+	
+	struct{
+        int day;
+        int month;
+        int year;
+    } join_date;
+};
+typedef struct _emp_t emp_t;
+
+
+void printEmp(emp_t* eAddr){
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",eAddr->empId,
+    eAddr->empName, eAddr->sal, eAddr->bonus);
+   printf("\tJoin Date:%02d-%02d-%4d\n",eAddr->join_date.day,eAddr->join_date.month,eAddr->join_date.year);    
+}
+int main(){
+   emp_t emp = {1001,"Murali",4000,10,{1,2,2022}};
+   printEmp(&emp);
+   
+   return 0;
+}
+--------------------------------------------------------------
+#include<stdio.h>
+struct _emp_t{
+	int empId;			
+	char empName[256];	
+	float sal;			
+	float bonus;	
+	
+	struct{
+        int day;
+        int month;
+        int year;
+    };
+};
+typedef struct _emp_t emp_t;
+
+
+void printEmp(emp_t* eAddr){
+   printf("\temployee id:%d\n\temployee name:%s\n\tsalary:%.2f\n\tbonus:%.2f\n",eAddr->empId,
+    eAddr->empName, eAddr->sal, eAddr->bonus);
+   printf("\tJoin Date:%02d-%02d-%4d\n",eAddr->day,eAddr->month,eAddr->year);    
+}
+int main(){
+   emp_t emp = {1001,"Murali",4000,10,{1,2,2022}};
+   printEmp(&emp);
+   
+   return 0;
+}
+--------------------------------------------------------------
+School Gate Log Book: Gate Keeper
+10:00am Teacher Nithin
+10:01am Student 3780
+10:02am Student 4050
+10:03am Parent 4050 7090
+--------------------------------------------------------------
+struct _log_t{
+    char time[20];                      //20
+    int personType;//1=T,2-S,3-P        //4
+    char teacherName[256];              //256
+    int rollNumber;                     //4
+    long long int parentAadhaarNumber;  //10  => 294
+};  
+typedef struct _log_t log_t;
+
+log_t logs[4] = {
+    {"10:00am", 1, "Nithin",0,0LL},        
+    {"10:01am",2,"",3780,0LL},
+    {"10:02am",2,"",4050,0LL},
+    {"10:03am",3,"",0,40507090LL},
+    };//294 x 4 = 1176
+--------------------------------------------------------------                                       
+union _person_cat_t{
+    char teacherName[256];              //256
+    int rollNumber;                     //4
+    long long int parentAadhaarNumber;  //10  => 256
+};
+typedef union _person_cat_t person_cat_t;
+struct _log_t{
+    char time[20];                      //20
+    int personType;//1=T,2-S,3-P        //4
+    person_cat_t person;                //256 => 280
+};  
+typedef struct _log_t log_t;
+
+log_t logs[4] = {
+    {"10:00am", 1, "Nithin",0,0LL},        
+    {"10:01am",2,"",3780,0LL},
+    {"10:02am",2,"",4050,0LL},
+    {"10:03am",3,"",0,40507090LL},
+    };//280 x 4 = 1120          1176-1120=56bytes saved
+                        //4000
+--------------------------------------------------------------
+
